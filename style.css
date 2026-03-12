@@ -1,0 +1,273 @@
+@font-face {
+  font-family: 'NationalPark';
+  src: url('NationalPark-Regular.ttf');
+}
+@font-face {
+  font-family: 'NationalParkBold';
+  src: url('NationalPark-ExtraBold.ttf');
+}
+
+body {
+  margin: 0;
+  background-color: #fbe5e5;
+  font-family: 'NationalPark', sans-serif;
+  color: rgba(0, 0, 0, 0.55);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Hero section ──────────────────────────── */
+
+#hero {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  padding: 4vh 5vw 2vh;
+}
+
+#hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+#hero-header h1 {
+  font-family: 'NationalParkBold', sans-serif;
+  font-size: clamp(0.8rem, 1.5vw, 1.4rem);
+  line-height: 1.3;
+  margin: 0;
+}
+
+#hero-subtitle {
+  font-family: 'NationalParkBold', sans-serif;
+  font-size: clamp(0.55rem, 0.85vw, 0.8rem);
+  line-height: 1.5;
+  opacity: 0.5;
+  margin: 0.4rem 0 0;
+}
+
+#hero-subtitle a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+#date-control {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+#date-label {
+  font-family: 'NationalParkBold', sans-serif;
+  font-size: clamp(0.7rem, 1.3vw, 1.2rem);
+}
+
+/* ── Slots text animation ────────────────── */
+
+.text-slots {
+  display: inline-flex;
+  line-height: 1.2;
+}
+
+.slot-col {
+  display: inline-block;
+  height: 1.2em;
+  overflow: hidden;
+  transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.slot-inner {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.slot-char {
+  display: block;
+  height: 1.2em;
+  line-height: 1.2em;
+  flex-shrink: 0;
+  white-space: pre;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.text-slots-copy {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Slider — matches the original p5 slider style */
+#day-slider {
+  width: clamp(70px, 10vw, 150px);
+  height: 15px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+#day-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #7053ad;
+  cursor: pointer;
+  margin-top: 0px;
+}
+
+#day-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #7053ad;
+  border: none;
+  cursor: pointer;
+}
+
+#day-slider::-webkit-slider-runnable-track {
+  height: 15px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+#day-slider::-moz-range-track {
+  height: 15px;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Canvas container — fills remaining space */
+#canvas-container {
+  flex: 1;
+  min-height: 0;
+  max-height: 80vh;
+  position: relative;
+}
+
+#canvas-container canvas {
+  display: block;
+}
+
+/* Back hint */
+#back-hint {
+  text-align: center;
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  color: rgba(0, 0, 0, 0.3);
+  padding: 0;
+  margin: 0;
+  transition: opacity 0.4s ease;
+}
+
+#back-hint.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* ── Names scroll section ─────────────────── */
+
+#names-section {
+  padding: 8vw 5vw;
+  background-color: #fbe5e5;
+  color: #7053ad;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+#name-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  columns: 3 300px;
+  column-gap: 3rem;
+  width: 100%;
+}
+
+#name-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.25rem 0;
+  break-inside: avoid;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#name-list li.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.flower-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 3px rgba(112, 83, 173, 0.2));
+}
+
+#name-list li span {
+  font-size: 1rem;
+  color: #7053ad;
+}
+
+/* ── Mobile ────────────────────────────────── */
+
+@media (max-width: 600px) {
+  #hero {
+    padding: 2vh 4vw 1.5vh;
+  }
+
+  #hero-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  #hero-header h1 {
+    font-size: clamp(1rem, 4.5vw, 1.6rem);
+  }
+
+  #hero-subtitle {
+    max-width: 70vw;
+    font-size: clamp(0.65rem, 2.5vw, 0.9rem);
+  }
+
+  #date-label {
+    font-size: clamp(0.85rem, 3.5vw, 1.3rem);
+  }
+
+  #date-control {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  #canvas-container {
+    max-height: 78vh;
+  }
+
+  #back-hint {
+    font-size: clamp(0.8rem, 3vw, 1rem);
+  }
+
+  #name-list {
+    columns: 1;
+  }
+}

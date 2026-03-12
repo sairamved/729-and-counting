@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lives Remembered</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.js"></script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+
+    <section id="hero">
+      <header id="hero-header">
+        <div>
+          <h1>Women allegedly killed<br>in the USA by men</h1>
+          <p id="hero-subtitle">Source: <a href="https://womencountusa.org/the-databases" target="_blank" rel="noopener">WOMEN COUNT USA: Femicide Accountability Project</a> by Dawn Wilcox<br>This is a working database &amp; entries for each woman are in various stages of completion</p>
+        </div>
+        <div id="date-control">
+          <input type="range" id="day-slider" min="0" max="231" value="0" />
+          <span id="date-label"></span>
+        </div>
+      </header>
+
+      <div id="canvas-container">
+        <!-- p5 canvas renders here -->
+      </div>
+
+      <div id="back-hint" class="hidden">click anywhere to return</div>
+    </section>
+
+    <section id="names-section">
+      <ul id="name-list"></ul>
+    </section>
+
+    <script src="text-slots.js"></script>
+    <script src="sketch.js"></script>
+    <script src="names.js"></script>
+  </body>
+</html>
