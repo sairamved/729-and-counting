@@ -20,6 +20,9 @@ let fAlpha = [];
 let fAlphaTarget = [];
 let fAlphaDelay = [];
 
+// Auto-advance timer
+let lastAdvanceFrame = 0;
+
 // Zoom
 let zScale = 1, zScaleTarget = 1;
 let zCX = 0, zCY = 0;           // current zoom center (lerped)
@@ -137,12 +140,14 @@ function buildFlowers() {
   let names = dayData.names || [];
   let positions = flowerPositions(count);
 
+  let abouts = dayData.about || [];
+
   for (let i = 0; i < count; i++) {
     let name = names[i] || '';
     let rng = seededRng(hashStr(name + i));
-
     flowers.push({
       name: name,
+      about: abouts[i] || '',
       numPetals: floor(rng() * 6 + 4),
       stemLen: rng() * 400 + 200,
       petalScale: rng() * 140 + 60,
@@ -161,6 +166,7 @@ function buildFlowers() {
   zScaleTarget = 1;
   zCXTarget = 0;
   zCYTarget = 0;
+  hideAboutOverlay();
 }
 
 function updateDateLabel() {
@@ -172,6 +178,27 @@ function updateDateLabel() {
     window._dateSlots = new TextSlots(document.getElementById('date-label'));
   }
   window._dateSlots.update(formatted);
+}
+
+// ── About overlay ────────────────────────────
+
+function showAboutOverlay(flowerIndex) {
+  let overlay = document.getElementById('about-overlay');
+  let textEl = document.getElementById('about-text');
+  let about = flowers[flowerIndex].about;
+  if (about) {
+    textEl.textContent = about;
+    overlay.classList.remove('hidden');
+    overlay.classList.add('visible');
+  } else {
+    hideAboutOverlay();
+  }
+}
+
+function hideAboutOverlay() {
+  let overlay = document.getElementById('about-overlay');
+  overlay.classList.remove('visible');
+  overlay.classList.add('hidden');
 }
 
 // ── Draw ──────────────────────────────────────
@@ -197,7 +224,7 @@ function draw() {
   background('#fbe5e5');
 
   // Auto-advance every ~6s, only in grid view
-  if (frameCount % 360 === 0 && focusedFlower === -1 && pendingDay === -1) nextDay();
+  if (frameCount - lastAdvanceFrame >= 360 && focusedFlower === -1 && pendingDay === -1) nextDay();
 
   // Check if fade-out is done and we need to swap to a new day
   checkPendingDay();
@@ -256,11 +283,13 @@ function draw() {
     drawFlower(f);
     pop();
 
-    // Name beneath flower — scale inversely with zoom to maintain screen size
+    // Name beneath flower (above on mobile when zoomed in)
     if (a > 10) {
       push();
-      let nameGap = lerp(SPACING * 0.26, SPACING * 1.2, constrain((zScale - 1) / (ZOOM_IN_SCALE - 1), 0, 1)) / max(1, zScale);
-      translate(f.wx, f.wy + nameGap, CAM_Z * 0.01);
+      let zt = constrain((zScale - 1) / (ZOOM_IN_SCALE - 1), 0, 1);
+      let nameGap = lerp(SPACING * 0.26, SPACING * 1.2, zt) / max(1, zScale);
+      let nameY = width < 600 ? f.wy + lerp(nameGap, -nameGap * 1.7, zt) : f.wy + nameGap;
+      translate(f.wx, nameY, CAM_Z * 0.01);
       noStroke();
       fill(0, a * 0.3);
       textFont(font);
@@ -349,9 +378,13 @@ function pickFlower(mx, my) {
 
 // ── Mouse / touch interaction ─────────────────
 
-function mousePressed() {
+function mousePressed(e) {
   // Ignore clicks outside the canvas
   if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) return;
+
+  // Ignore clicks on the about overlay
+  let overlay = document.getElementById('about-overlay');
+  if (e && e.target && overlay.contains(e.target)) return;
 
   if (focusedFlower !== -1) {
     // Unfocus → zoom out, cancel any pending day transition
@@ -360,6 +393,8 @@ function mousePressed() {
     zScaleTarget = 1;
     zCXTarget = 0;
     zCYTarget = 0;
+    lastAdvanceFrame = frameCount; // reset timer so it doesn't advance immediately
+    hideAboutOverlay();
     for (let i = 0; i < flowers.length; i++) {
       fAlphaTarget[i] = 255;
       fAlphaDelay[i] = i * 3;
@@ -367,7 +402,8 @@ function mousePressed() {
     return;
   }
 
-  if (zScale > 1.1) return; // still zooming out, don't allow new focus
+  // Block clicks while transitioning or still zooming out
+  if (pendingDay !== -1 || zScale > 1.1) return;
 
   let hit = pickFlower(mouseX, mouseY);
   if (hit !== -1) {
@@ -383,12 +419,16 @@ function mousePressed() {
         fAlphaTarget[i] = 0;
       }
     }
+    showAboutOverlay(hit);
   }
 }
 
-function touchStarted() {
+function touchStarted(e) {
   // Forward to mousePressed for mobile
   if (touches.length > 0) {
+    // Don't dismiss if touching the about overlay
+    let overlay = document.getElementById('about-overlay');
+    if (e && e.target && overlay.contains(e.target)) return;
     mouseX = touches[0].x;
     mouseY = touches[0].y;
     mousePressed();
@@ -424,6 +464,7 @@ function transitionToDay(day) {
     zScaleTarget = 1;
     zCXTarget = 0;
     zCYTarget = 0;
+    hideAboutOverlay();
   }
 
   // If no flowers, just build immediately
@@ -452,6 +493,7 @@ function checkPendingDay() {
   if (allOut) {
     currentDay = pendingDay;
     pendingDay = -1;
+    lastAdvanceFrame = frameCount;
     document.getElementById('day-slider').value = currentDay;
     buildFlowers();
     updateDateLabel();

@@ -228,6 +228,45 @@ body {
   color: #7053ad;
 }
 
+/* ── About-her overlay ─────────────────────── */
+
+#about-overlay {
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30%;
+  max-height: 60%;
+  overflow-y: auto;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  scrollbar-width: none;
+}
+
+#about-overlay::-webkit-scrollbar {
+  display: none;
+}
+
+#about-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#about-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#about-text {
+  font-family: 'NationalPark', sans-serif;
+  font-size: clamp(0.7rem, 1vw, 0.95rem);
+  line-height: 1.65;
+  color: rgba(112, 83, 173, 0.7);
+  margin: 0;
+  font-style: italic;
+}
+
 /* ── Mobile ────────────────────────────────── */
 
 @media (max-width: 600px) {
@@ -269,5 +308,21 @@ body {
 
   #name-list {
     columns: 1;
+  }
+
+  #about-overlay {
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 8%;
+    transform: translateX(-50%);
+    width: 85%;
+    max-height: 30%;
+  }
+
+  #about-text {
+    font-size: clamp(0.65rem, 2.8vw, 0.85rem);
+    text-align: center;
+    line-height: 1.55;
   }
 }
