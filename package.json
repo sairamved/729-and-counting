@@ -1,0 +1,15 @@
+{
+  "name": "flowers-v2",
+  "version": "1.0.0",
+  "description": "729 (and counting) women and girls in the U.S. allegedly lost their lives to femicide in 2024. Based on the meticulous data collected by Dawn Wilcox from [Women Count USA](https://womencountusa.org/the-databases), this interactive visualization shows each life represented as a unique flower, marking their individuality and absence.",
+  "main": "names.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^3.2.1"
+  }
+}
