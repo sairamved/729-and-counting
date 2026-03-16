@@ -267,6 +267,40 @@ body {
   font-style: italic;
 }
 
+/* ── Scroll-to-top button ────────────────── */
+
+#scroll-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #7053ad;
+  color: #fbe5e5;
+  font-size: 1.3rem;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, background 0.2s ease;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#scroll-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#scroll-top:hover {
+  background: #9179c4;
+}
+
 /* ── Mobile ────────────────────────────────── */
 
 @media (max-width: 600px) {

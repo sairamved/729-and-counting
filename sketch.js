@@ -278,7 +278,7 @@ function draw() {
       } else {
         stroke(112, 83, 173, a);
       }
-      strokeWeight(0.9999);
+      strokeWeight(0.1);
     }
     drawFlower(f);
     pop();
