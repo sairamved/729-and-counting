@@ -424,15 +424,16 @@ function mousePressed(e) {
 }
 
 function touchStarted(e) {
-  // Forward to mousePressed for mobile
+  // Only handle touches that land on the p5 canvas — otherwise we'd
+  // preventDefault page scrolling and block native controls (slider, links).
+  if (!e || !e.target || e.target.tagName !== 'CANVAS') return;
   if (touches.length > 0) {
-    // Don't dismiss if touching the about overlay
     let overlay = document.getElementById('about-overlay');
-    if (e && e.target && overlay.contains(e.target)) return;
+    if (overlay.contains(e.target)) return;
     mouseX = touches[0].x;
     mouseY = touches[0].y;
-    mousePressed();
-    return false; // prevent default
+    mousePressed(e);
+    return false; // prevent default only for canvas taps
   }
 }
 

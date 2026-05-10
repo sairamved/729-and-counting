@@ -112,27 +112,28 @@ body {
 /* Slider — matches the original p5 slider style */
 #day-slider {
   width: clamp(70px, 10vw, 150px);
-  height: 15px;
+  height: 28px;
   outline: none;
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   cursor: pointer;
+  touch-action: pan-y;
 }
 
 #day-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 15px;
-  height: 15px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #7053ad;
   cursor: pointer;
-  margin-top: 0px;
+  margin-top: -7px;
 }
 
 #day-slider::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #7053ad;
   border: none;
@@ -149,6 +150,22 @@ body {
   height: 15px;
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.05);
+}
+
+@media (pointer: coarse) {
+  #day-slider {
+    width: clamp(120px, 30vw, 200px);
+    height: 36px;
+  }
+  #day-slider::-webkit-slider-thumb {
+    width: 36px;
+    height: 36px;
+    margin-top: -10px;
+  }
+  #day-slider::-moz-range-thumb {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 /* Canvas container — fills remaining space */
