@@ -119,9 +119,12 @@ body {
   background: transparent;
   cursor: pointer;
   touch-action: pan-y;
+  /* Invisible padding expands the touch hit area without changing layout */
+  padding: 14px 0;
+  margin: -14px 0;
+  box-sizing: content-box;
 }
 
-/* Visible thumb stays 15px, but a transparent border expands the hit area */
 #day-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 15px;
@@ -130,9 +133,6 @@ body {
   background: #7053ad;
   cursor: pointer;
   margin-top: 0px;
-  border: 12px solid transparent;
-  background-clip: padding-box;
-  box-sizing: content-box;
 }
 
 #day-slider::-moz-range-thumb {
@@ -140,10 +140,8 @@ body {
   height: 15px;
   border-radius: 50%;
   background: #7053ad;
+  border: none;
   cursor: pointer;
-  border: 12px solid transparent;
-  background-clip: padding-box;
-  box-sizing: content-box;
 }
 
 #day-slider::-webkit-slider-runnable-track {
