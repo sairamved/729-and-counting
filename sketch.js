@@ -59,6 +59,27 @@ function setup() {
   angleMode(DEGREES);
   textFont(font);
 
+  // Bind touch directly to the canvas element so it never interferes with
+  // page scroll, slider, or links elsewhere on the page. Allow vertical
+  // pan so the page can still scroll when a touch starts on the canvas.
+  cnv.elt.style.touchAction = 'pan-y';
+  cnv.elt.addEventListener('touchend', function (e) {
+    if (e.changedTouches.length === 0) return;
+    let rect = cnv.elt.getBoundingClientRect();
+    let t = e.changedTouches[0];
+    // Ignore if the finger moved significantly (i.e. the user was scrolling)
+    let startX = cnv.elt._touchStartX, startY = cnv.elt._touchStartY;
+    if (startX != null && (Math.abs(t.clientX - startX) > 10 || Math.abs(t.clientY - startY) > 10)) return;
+    mouseX = t.clientX - rect.left;
+    mouseY = t.clientY - rect.top;
+    mousePressed(e);
+  }, { passive: true });
+  cnv.elt.addEventListener('touchstart', function (e) {
+    if (e.touches.length === 0) return;
+    cnv.elt._touchStartX = e.touches[0].clientX;
+    cnv.elt._touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
   recomputeLayout();
   buildFlowers();
   updateDateLabel();
@@ -423,19 +444,6 @@ function mousePressed(e) {
   }
 }
 
-function touchStarted(e) {
-  // Only handle touches that land on the p5 canvas — otherwise we'd
-  // preventDefault page scrolling and block native controls (slider, links).
-  if (!e || !e.target || e.target.tagName !== 'CANVAS') return;
-  if (touches.length > 0) {
-    let overlay = document.getElementById('about-overlay');
-    if (overlay.contains(e.target)) return;
-    mouseX = touches[0].x;
-    mouseY = touches[0].y;
-    mousePressed(e);
-    return false; // prevent default only for canvas taps
-  }
-}
 
 // ── Slider (HTML element) ─────────────────────
 

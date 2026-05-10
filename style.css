@@ -112,7 +112,7 @@ body {
 /* Slider — matches the original p5 slider style */
 #day-slider {
   width: clamp(70px, 10vw, 150px);
-  height: 28px;
+  height: 15px;
   outline: none;
   -webkit-appearance: none;
   appearance: none;
@@ -121,23 +121,29 @@ body {
   touch-action: pan-y;
 }
 
+/* Visible thumb stays 15px, but a transparent border expands the hit area */
 #day-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 28px;
-  height: 28px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: #7053ad;
   cursor: pointer;
-  margin-top: -7px;
+  margin-top: 0px;
+  border: 12px solid transparent;
+  background-clip: padding-box;
+  box-sizing: content-box;
 }
 
 #day-slider::-moz-range-thumb {
-  width: 28px;
-  height: 28px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: #7053ad;
-  border: none;
   cursor: pointer;
+  border: 12px solid transparent;
+  background-clip: padding-box;
+  box-sizing: content-box;
 }
 
 #day-slider::-webkit-slider-runnable-track {
@@ -150,22 +156,6 @@ body {
   height: 15px;
   border-radius: 20px;
   background: rgba(0, 0, 0, 0.05);
-}
-
-@media (pointer: coarse) {
-  #day-slider {
-    width: clamp(120px, 30vw, 200px);
-    height: 36px;
-  }
-  #day-slider::-webkit-slider-thumb {
-    width: 36px;
-    height: 36px;
-    margin-top: -10px;
-  }
-  #day-slider::-moz-range-thumb {
-    width: 36px;
-    height: 36px;
-  }
 }
 
 /* Canvas container — fills remaining space */
